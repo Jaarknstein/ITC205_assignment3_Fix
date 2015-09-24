@@ -14,7 +14,7 @@ public class BookMapDAO implements IBookDAO {
 	
 	// declaring variables
 	private IBookHelper helper;
-	private int numId;
+	private int nextId;
 	
 	// bookMap is a collection
 	private Map<Integer, IBook> bookMap;
@@ -24,7 +24,7 @@ public class BookMapDAO implements IBookDAO {
 		if (helper == null ) {
 			throw new IllegalArgumentException("Helper cannot be NULL");
 		}
-		numId = 1;
+		nextId = 1;
 		this.helper = helper; 
 		bookMap = new HashMap<Integer, IBook>();
 	}
@@ -43,7 +43,7 @@ public class BookMapDAO implements IBookDAO {
 	//adds the new book to a collection of Books
 	//returns the new book 
 	public IBook addBook(String author, String title, String callNo) {
-		int id = numId++;
+		int id = getNextId();
 		IBook book = helper.makeBook(author, title, callNo, id);
 		bookMap.put(Integer.valueOf(id), book);
 		return book;
@@ -105,6 +105,11 @@ public class BookMapDAO implements IBookDAO {
 		}
 		List<IBook> cList = Collections.unmodifiableList(list);
 		return cList;
+	}
+	
+	// A separate method for changing the Id, instead of being in the addbook method
+	private int getNextId() {
+		return nextId++;
 	}
 	
 }
