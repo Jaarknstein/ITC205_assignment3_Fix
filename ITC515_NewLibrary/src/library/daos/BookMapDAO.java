@@ -4,7 +4,7 @@ import library.interfaces.daos.IBookDAO;
 import library.interfaces.daos.IBookHelper;
 import library.interfaces.entities.IBook;
 
-public class BookDAO implements IBookDAO {
+public class BookMapDAO implements IBookDAO {
 	
 	// declaring variables
 	private IBookHelper helper;
