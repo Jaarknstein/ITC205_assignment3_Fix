@@ -34,8 +34,8 @@ public class Book implements IBook {
 	private boolean sane(String author, String title, String callNumber, int bookID){
 		boolean isSane = false;
 		
-		if (!(author.isEmpty()) && !(title.isEmpty()) && !(callNumber.isEmpty()) && bookID > 0 
-				&& author != null && title != null && callNumber != null){
+		if ((author != null && title != null && callNumber != null && !(author.isEmpty())) && 
+				!(title.isEmpty()) && !(callNumber.isEmpty()) && bookID > 0){
 			isSane = true;
 		}
 		
