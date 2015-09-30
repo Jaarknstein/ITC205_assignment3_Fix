@@ -31,6 +31,7 @@ public class TestBook {
 		book = null;
 	}
 	
+	//tests if book instance is an instance of IBook
 	@Test
 	public void testBook(){
 		IBook actual = new Book(author, title, callNo, id);
@@ -38,11 +39,13 @@ public class TestBook {
 		assertTrue(actual instanceof IBook);
 	}
 	
+	//tests if exception is thrown due to illegal argument
 	@Test(expected=IllegalArgumentException.class)
 	public void testBookAuthorNull() {
 		book = new Book(null, title, callNo, id);
 	}
 	
+	//tests if book's loan variable is the same to the actual loan
 	@Test
 	public void testBorrowAndGetLoan() {
 		//setup
@@ -56,6 +59,7 @@ public class TestBook {
 		
 	}
 	
+	//Tests to see if returnbook() will change state from ON_LOAN to AVAILABLE
 	@Test
 	public void testReturnBookUndamaged() {
 		//setup
@@ -72,8 +76,101 @@ public class TestBook {
 		EBookState actualState = book.getState();
 		assertEquals(expectedState, actualState);
 		
+	}
+	
+	//does it return state?
+	@Test
+	public void testGetState() {
+		IBook actual = new Book(author, title, callNo, id);
+		assertTrue(actual.getState() == EBookState.AVAILABLE);
+	}
+	
+	//does it return title?
+	@Test
+	public void testGetTitle() {
+		IBook actual = new Book(author, title, callNo, id);
+		assertTrue(actual.getTitle() == "Generic Name");
+	}
+	
+	//does it return callnumber?
+	@Test
+	public void testGetCallNumber() {
+		IBook actual = new Book(author, title, callNo, id);
+		assertTrue(actual.getCallNumber() == "SMI 1.2345");
+	}
+	
+	//does it return id?
+	@Test
+	public void testGetID() {
+		IBook actual = new Book(author, title, callNo, id);
+		assertTrue(actual.getID() == 1);
+	}
+	
+	//does it return author?
+	@Test
+	public void testGetAuthor() {
+		IBook actual = new Book(author, title, callNo, id);
+		assertTrue(actual.getAuthor() == "John Smith");
+	}
+	
+	//Tests to see if lose() will change state from ON_LOAN to LOST
+	@Test
+	public void testLose() {
+		//setup
+		ILoan mockLoan = mock(ILoan.class);
+				
+		//execute
+		book.borrow(mockLoan);
+		book.lose();
+		assertTrue(book.getState() == EBookState.LOST);
+	}
+	
+	//Tests to see if dispose() will change state from available to disposed
+	@Test
+	public void testDispose() {
+		IBook actual = new Book(author, title, callNo, id);
+		actual.dispose();
+		assertTrue(actual.getState() == EBookState.DISPOSED);
+	}
+	
+	//Tests to see if returned damaged book will change state from ON_LOAN to DAMAGED
+	@Test
+	public void testReturnBookDamaged() {
+		//setup
+		ILoan mockLoan = mock(ILoan.class);
 		
+		//execute
+		book.borrow(mockLoan);
+		book.returnBook(true);
+		//loan should now be NULL
+		ILoan actualLoan = book.getLoan();
+		assertNull(actualLoan);
 		
+		//state should be damaged
+		EBookState expectedState = EBookState.DAMAGED;
+		EBookState actualState = book.getState();
+		assertEquals(expectedState, actualState);
+	}
+	
+	//Tests to see if repair() will change state from damaged to available
+	@Test
+	public void testGetRepair() {
+		//setup
+		ILoan mockLoan = mock(ILoan.class);
+		
+		//execute
+		book.borrow(mockLoan);
+		book.returnBook(true);
+		//loan should now be NULL
+		ILoan actualLoan = book.getLoan();
+		assertNull(actualLoan);
+		
+		//state should be damaged
+		book.repair();
+		//state should be available
+		EBookState expectedState = EBookState.AVAILABLE;
+		EBookState actualState = book.getState();
+		assertEquals(expectedState, actualState);
 	}
 	
 }
