@@ -10,8 +10,6 @@ public interface ILoan {
 	public void commit(int id);
 	
 	public void complete();
-
-	public boolean isCurrent();
 	
 	public boolean isOverDue();
 	
