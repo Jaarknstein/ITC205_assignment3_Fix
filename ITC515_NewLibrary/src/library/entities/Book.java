@@ -108,7 +108,7 @@ public class Book implements IBook {
 	//throws RuntimeException if: the book is not currently AVAILABLE, DAMAGED, or LOST 
 	public void dispose() {
 		
-		if (((state_ == EBookState.AVAILABLE) == false || (state_ == EBookState.DAMAGED) == false || (state_ == EBookState.LOST) == false)) {
+		if (!(state_ == EBookState.AVAILABLE || state_ == EBookState.DAMAGED || state_ == EBookState.LOST)) {
 			throw new RuntimeException("Book must be AVAILABLE, DAMAGED or LOST to dispose");
 		}
 		
