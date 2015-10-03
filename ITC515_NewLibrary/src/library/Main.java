@@ -1,5 +1,8 @@
 package library;
 
+//Couldn't implement myself
+//Had to reference integrated release
+
 import library.hardware.CardReader;
 import library.hardware.Display;
 import library.hardware.Printer;
@@ -8,6 +11,12 @@ import library.hardware.Scanner;
 import java.util.Calendar;
 import java.util.Date;
 
+import library.daos.BookHelper;
+import library.daos.BookMapDAO;
+import library.daos.LoanHelper;
+import library.daos.LoanMapDAO;
+import library.daos.MemberHelper;
+import library.daos.MemberMapDAO;
 import library.interfaces.IMainListener;
 import library.interfaces.daos.IBookDAO;
 import library.interfaces.daos.ILoanDAO;
@@ -28,12 +37,16 @@ public class Main implements IMainListener {
 	private IMemberDAO memberDAO;
 	
 	public Main() {
+		bookDAO = new BookMapDAO(new BookHelper());
+		loanDAO = new LoanMapDAO(new LoanHelper());
+		memberDAO = new MemberMapDAO(new MemberHelper());
+
 		reader = new CardReader();
 		scanner = new Scanner();
 		printer = new Printer();
 		display = new Display();
 		
-		//setupTestData();
+		setupTestData();
 	}
 
 
@@ -47,8 +60,8 @@ public class Main implements IMainListener {
 	
 	@Override
 	public void borrowBooks() {
-		BorrowUC_CTL ctl = new BorrowUC_CTL(reader, scanner, printer, display, 
-				 null, null, null);
+		final BorrowUC_CTL ctl = new BorrowUC_CTL(reader, scanner, printer, display, 
+				 bookDAO, loanDAO, memberDAO);
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
             	ctl.initialise();
@@ -120,7 +133,7 @@ public class Main implements IMainListener {
 	public static void main(String[] args) {
 		
         // start the GUI
-		Main main = new Main();
+		final Main main = new Main();
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
             	main.display.setDisplay(new MainPanel(main), "Main Menu");
